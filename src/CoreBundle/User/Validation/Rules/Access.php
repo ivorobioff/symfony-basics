@@ -1,0 +1,49 @@
+<?php
+namespace CoreBundle\User\Validation\Rules;
+use CoreBundle\User\Payloads\CredentialsPayload;
+use CoreBundle\User\Services\UserService;
+use ImmediateSolutions\Support\Validation\Error;
+use ImmediateSolutions\Support\Validation\Rules\AbstractRule;
+use ImmediateSolutions\Support\Validation\Value;
+
+/**
+ * @author Igor Vorobiov<igor.vorobioff@gmail.com>
+ */
+class Access extends AbstractRule
+{
+    /**
+     * @var UserService
+     */
+    private $userService;
+
+    /**
+     * @param UserService $userService
+     */
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+
+        $this
+            ->setIdentifier('access')
+            ->setMessage('A user with the provided credentials cannot be found.');
+    }
+
+    /**
+     * @param Value $value
+     * @return Error|null
+     */
+    public function check($value)
+    {
+        list($username, $password) = $value->extract();
+
+        $payload = new CredentialsPayload();
+        $payload->setUsername($username);
+        $payload->setPassword($password);
+
+        if ($this->userService->canAuthorize($payload)){
+            return null;
+        }
+
+        return $this->getError();
+    }
+}

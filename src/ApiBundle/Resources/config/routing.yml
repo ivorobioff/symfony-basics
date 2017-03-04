@@ -1,0 +1,15 @@
+client_api:
+    resource: "@ApiBundle/Client/Controllers/"
+    type:     annotation
+    prefix:   /api
+
+document_api:
+    resource: "@ApiBundle/Document/Controllers/"
+    type:     annotation
+    prefix:   /api
+
+
+session_api:
+    resource: "@ApiBundle/Session/Controllers/"
+    type:     annotation
+    prefix:   /api
